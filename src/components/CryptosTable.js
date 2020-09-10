@@ -15,9 +15,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-import Icon from '@material-ui/core/Icon';
 
-
+// Task: learn Hidden component Material UI
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -97,8 +96,10 @@ const getMarketData = (dataObj, key) => {
 const SORTS = {
   NONE: list => list,
   NAME: list => sortBy(list, 'name'),
-  PRICE: list => sortBy(list, 'price'),
-  MARKET_CAP: list => sortBy(list, 'market_cap'),
+  // PRICE: list => sortBy(list, 'price'),
+  PRICE: list => list.sort( (a,b) => a.price - b.price),
+  // MARKET_CAP: list => sortBy(list, 'market_cap'),
+  MARKET_CAP: list => list.sort( (a,b) => a.market_cap - b.market_cap),
 }
 
 
@@ -133,11 +134,29 @@ const CryptosTable = () => {
           <TableCell 
             align='left'
             onClick={ ()=> handleSort('NAME')}   
-          >         
-            Name  
+          >
+          {sort.sortKey !== 'NAME' ? 'Name'
+             : sort.isReverse ? <span>Name &uarr; z-a</span> : <span>Name &darr; a-z</span>
+          }      
+             
             </TableCell>
-            <TableCell className={classes.bigScreen} align='left'>Market Cap</TableCell>
-            <TableCell align='left'>Price</TableCell>
+            <TableCell 
+              className={classes.bigScreen}
+              align='left'
+              onClick={() => handleSort('MARKET_CAP')}
+            > 
+            {sort.sortKey !== 'MARKET_CAP' ? 'Market Cap'
+             : sort.isReverse ? <span>Market Cap &uarr;</span> : <span>Market Cap &darr;</span>
+            }
+            </TableCell>
+            <TableCell
+              align='left'
+              onClick={() => handleSort('PRICE')}
+            >
+            {sort.sortKey !== 'PRICE' ? 'Price'
+             : sort.isReverse ? <span>Price &uarr;</span> : <span>Price &darr;</span>
+            } 
+            </TableCell>
             <TableCell align='left'>Change (24h)</TableCell>
             
           </TableRow>
