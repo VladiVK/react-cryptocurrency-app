@@ -2,9 +2,10 @@ import React, {useReducer, createContext, useEffect} from 'react'
 import cryptoReducer from '../reducers/cryptos.reducer'
 import axios from 'axios';
 
+// const DEMO_KEY = 'demo-26240835858194712a4f8cc0dc635c7a'
 const API_KEY = 'ae04d4b6ed06b87563e71f31fd10bc23'
 const BASE_URL = 'https://api.nomics.com/v1/currencies/ticker?'
-const URL = `${BASE_URL}key=${API_KEY}&interval=1d,30d&convert=USD`
+const URL = `${BASE_URL}key=${API_KEY}&interval=1d,7d,30d&convert=USD`
 
 const defaultValue = {
     loading: true,

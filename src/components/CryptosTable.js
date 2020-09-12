@@ -1,6 +1,7 @@
 
 import React, {useContext, useState} from 'react';
 import { CryptosContext } from '../contexts/CryptosContext';
+import PriceChart from './PriceChart'
 // lodash
 import {sortBy} from 'lodash'
 // Material-UI
@@ -15,6 +16,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
+;
 
 // Task: learn Hidden component Material UI
 
@@ -123,6 +125,7 @@ const CryptosTable = () => {
         sortFunction(state.cryptos).reverse()
         : sortFunction(state.cryptos);
 
+  
   return (
     <TableContainer component={Paper}>
       <Table aria-label='simple table'>
@@ -139,6 +142,9 @@ const CryptosTable = () => {
              : sort.isReverse ? <span>Name &uarr; z-a</span> : <span>Name &darr; a-z</span>
           }      
              
+            </TableCell>
+            <TableCell align='left'>
+              Chart (24h)
             </TableCell>
             <TableCell 
               className={classes.bigScreen}
@@ -186,6 +192,16 @@ const CryptosTable = () => {
                     
                   </Box>           
                 </TableCell>
+                <TableCell align='left' style={{color: 'red'}}>
+                  { !crypto['1d'] ? 'NA' 
+                    : <PriceChart
+                      price={crypto.price}
+                      priceChanges={crypto['1d'].price_change}
+                      priceChangesPct={crypto['1d'].price_change_pct} 
+                      />
+                  }
+                 
+                </TableCell>
               <TableCell className={classes.bigScreen} align='left'>
                   <Typography variant='subtitle1'>
                       {getMarketData(crypto,'market_cap')}  
@@ -200,6 +216,7 @@ const CryptosTable = () => {
                 align='left'
                 style={{color: dayChangesColor(crypto['1d'], 'price_change_pct')}}  
               > 
+              
                 <Typography variant='subtitle1'>
                     { dayChanges(crypto['1d'], 'price_change_pct') }
                 </Typography>
