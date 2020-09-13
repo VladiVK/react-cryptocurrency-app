@@ -1,12 +1,13 @@
-import React,{useContext} from 'react';
+
+import React,{useContext} from 'react'
 import {CryptosContext} from '../contexts/CryptosContext'
 
 // components
 import CryptosTable from './CryptosTable'
-import PriceChart from './PriceChart';
+import SearchBar from './SearchBar'
 // Material-UI
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import Typography from '@material-ui/core/Typography';
 
 
 const Cryptos = () => {
@@ -17,8 +18,15 @@ const Cryptos = () => {
     <>
       {state.loading && <CircularProgress />}
       {state.error && <h1>{state.error}</h1>}
-      <CryptosTable />
-      <PriceChart />
+        {!state.loading && !state.error &&
+          <>
+            <SearchBar />
+            <Typography align='center' variant='h4'>
+              Top 100 cryptos by Market Cap
+            </Typography>   
+            <CryptosTable />
+          </>
+        }
     </>
   );
 }

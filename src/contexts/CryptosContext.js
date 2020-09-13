@@ -10,6 +10,7 @@ const URL = `${BASE_URL}key=${API_KEY}&interval=1d,7d,30d&convert=USD`
 const defaultValue = {
     loading: true,
     error: '',
+    searchTerm: '',
     cryptos: [],
 };   
 

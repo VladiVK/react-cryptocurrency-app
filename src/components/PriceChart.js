@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { LineChart, Line } from 'recharts';
 
-const getIsPositive = (value) => {
+const culcIsPositive = (value) => {
   switch (true) {
     case value > 0:
       return true;
@@ -11,7 +11,7 @@ const getIsPositive = (value) => {
       return true;
   }
 };
-const getChartColor = (value) => {
+const culcChartColor = (value) => {
   let parsedValue = new Intl.NumberFormat('en-US', { style: 'percent' })
     .format(value)
     .replace('%', '');
@@ -26,16 +26,15 @@ const getChartColor = (value) => {
       return '#5c5c5c';
   }
 };
-
-const getStartPoint = (isPositive, price, priceChanges) =>
+const culcStartPoint = (isPositive, price, priceChanges) =>
   isPositive
     ? Number(price) - Number(priceChanges)
     : Number(price) + Number(priceChanges.replace('-', ''));
 
-    
+
 const PriceChart = ({ price, priceChanges, priceChangesPct }) => {
-  const isPositive = getIsPositive(priceChanges);
-  const startPoint = getStartPoint(isPositive, price, priceChanges);
+  const isPositive = culcIsPositive(priceChanges);
+  const startPoint = culcStartPoint(isPositive, price, priceChanges);
   const data = [
     { name: 'Page A', uv: startPoint, pv: 300, amt: 300 },
     { name: 'Page B', uv: price, pv: 300, amt: 300 },
@@ -46,10 +45,11 @@ const PriceChart = ({ price, priceChanges, priceChangesPct }) => {
       <Line
         type='natural'
         dataKey='uv'
-        stroke={getChartColor(priceChangesPct)}
+        stroke={culcChartColor(priceChangesPct)}
       />
     </LineChart>
   );
 };
 
 export default PriceChart;
+
