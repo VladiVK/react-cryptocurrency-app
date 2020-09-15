@@ -8,10 +8,17 @@ const BASE_URL = 'https://api.nomics.com/v1/currencies/ticker?'
 const URL = `${BASE_URL}key=${API_KEY}&interval=1d,7d,30d&convert=USD`
 
 const defaultValue = {
+    cryptos: [],
     loading: true,
     error: '',
     searchTerm: '',
-    cryptos: [],
+    filters: [
+        {sortKey: 'NONE', value: true, isReverse: false},
+        {sortKey: 'PRICE', value: false, isReverse: false},
+        {sortKey: 'MARKET_CAP', value: false, isReverse: false},
+        {sortKey: 'NAME', value: false, isReverse: false},
+    ]
+    
 };   
 
 
@@ -19,7 +26,7 @@ export const CryptosContext = createContext();
 
 export const CryptosProvider = (props) => {
    
-    const [cryptos, dispatch] = useReducer(cryptoReducer, defaultValue)
+    const [state, dispatch] = useReducer(cryptoReducer, defaultValue)
 
     useEffect( () => {
         axios
@@ -32,7 +39,7 @@ export const CryptosProvider = (props) => {
     }, [])
 
     return (
-        <CryptosContext.Provider value={[cryptos, dispatch]}>
+        <CryptosContext.Provider value={[state, dispatch]}>
             {props.children}
         </CryptosContext.Provider>
     )

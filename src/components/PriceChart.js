@@ -43,7 +43,7 @@ const PriceChart = ({ price, priceChanges, priceChangesPct }) => {
   return (
     <LineChart width={100} height={50} data={data}>
       <Line
-        type='natural'
+        type='monotone'
         dataKey='uv'
         stroke={culcChartColor(priceChangesPct)}
       />

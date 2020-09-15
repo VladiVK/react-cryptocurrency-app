@@ -12,8 +12,12 @@ import Slide from '@material-ui/core/Slide';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
+// import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
+import Container from '@material-ui/core/Container'
+import { Button } from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -90,9 +94,24 @@ const SearchBar = (props) => {
   const classes = useStyles();
 
   const [inputValue, setInputValue] = useState('');
+
+  const [isFilters, setIsFilters] = useState(false);
+
   const [state, dispatch] = useContext(CryptosContext);
 
-  const handleInput = e => setInputValue( e.target.value)
+  const handleInput = e => setInputValue( e.target.value);
+
+  const sort = state.filters.find( el => el.value === true);
+
+  const handleSort = (sortKey) => {
+    const isReverse = (sort.sortKey === sortKey) && (sort.isReverse === false);
+    dispatch({
+      type: 'SET_FILTERS',
+      payload: {sortKey: sortKey, value: true, isReverse: isReverse}
+    })
+    
+  };
+
   useEffect( () => {
       dispatch({type: 'SEARCH_TERM', payload: inputValue})
   }, [inputValue, dispatch] )
@@ -103,13 +122,15 @@ const SearchBar = (props) => {
       <HideOnScroll {...props}>
         <AppBar>
           <Toolbar>
+           
             <IconButton
+              onClick={ () => setIsFilters( prev => !prev) }
               edge='start'
               className={classes.menuButton}
               color='inherit'
               aria-label='open drawer'
-            >
-              <MenuIcon />
+            > 
+              <TimelineRoundedIcon />
             </IconButton>
             <Typography className={classes.title} variant='h6' noWrap>
               Cryptos Market Digest
@@ -131,6 +152,14 @@ const SearchBar = (props) => {
               />
             </div>
           </Toolbar>
+          {
+            isFilters && 
+              <Container>
+                <Button onClick={() => handleSort('NAME')}>Name</Button>
+                <Button onClick={() => handleSort('PRICE')}>Price</Button>
+                <Button onClick={() => handleSort('MARKET_CAP')}>Market Cap</Button>
+              </Container>
+          }
         </AppBar>
       </HideOnScroll>
       <Toolbar />

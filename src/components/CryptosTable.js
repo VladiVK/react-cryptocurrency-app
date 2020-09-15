@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { CryptosContext } from '../contexts/CryptosContext';
 import PriceChart from './PriceChart';
 // lodash
-import { sortBy } from 'lodash';
+import { initial, sortBy } from 'lodash';
 // Material-UI
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -88,10 +88,8 @@ const getMarketData = (dataObj, key) => {
 
 const SORTS = {
   NONE: (list) => list,
-  NAME: (list) => sortBy(list, 'name'),
-  // PRICE: list => sortBy(list, 'price'),
+  NAME: (list) => sortBy(list, 'name'), 
   PRICE: (list) => list.sort((a, b) => a.price - b.price),
-  // MARKET_CAP: list => sortBy(list, 'market_cap'),
   MARKET_CAP: (list) => list.sort((a, b) => a.market_cap - b.market_cap),
 };
 
@@ -101,28 +99,46 @@ const CryptosTable = () => {
 
   const [state, dispatch] = useContext(CryptosContext);
 
-  const [sort, setSort] = useState({
-    sortKey: 'NONE',
-    isReverse: false,
-  });
+  const localList = [...state.cryptos];
+
+  const sort = state.filters.find( el => el.value === true);
+  //{sortKey: 'NONE', value: true, isReverse: false},
+  
+
+
+  
+
+
+  // const handleSort = (sortKey) => {
+  //   const isReverse = sort.sortKey === sortKey && sort.isReverse === false;
+  //   setSort({ sortKey, isReverse });
+  // };
   const handleSort = (sortKey) => {
-    const isReverse = sort.sortKey === sortKey && sort.isReverse === false;
-    setSort({ sortKey, isReverse });
+    const isReverse = (sort.sortKey === sortKey) && (sort.isReverse === false);
+    dispatch({
+      type: 'SET_FILTERS',
+      payload: {sortKey: sortKey, value: true, isReverse: isReverse}
+    })
+    
   };
+
   const sortFunction = SORTS[sort.sortKey];
+  
 
   
    
   const createList = () => {
-    if(state.searchTerm.length === 0) return state.cryptos
-    return state.cryptos.filter( coin => (
+    if(state.searchTerm.length === 0) return localList
+    return localList.filter( coin => (
         coin.name.toLowerCase().includes(state.searchTerm.toLowerCase() )
       )
     )
   }
  // initial list by search condition or as it is
   const initialList = createList();
-  
+
+  // console.log(initialList);
+
   const sortedCryptos = sort.isReverse
     ? sortFunction( initialList ).reverse()
     : sortFunction( initialList );
@@ -134,13 +150,14 @@ const CryptosTable = () => {
         <TableHead>
           <TableRow>
             <TableCell
-             className={classes.bigScreen}
+             className={classes.bigScreen}  
               /* component='th' */
               /* scope='row' */
             >
               Rank
             </TableCell>
-            <TableCell align='left' onClick={() => handleSort('NAME')}>
+            <TableCell align='left' onClick={ () => handleSort('NAME')}
+             >
               {sort.sortKey !== 'NAME' ? (
                 'Name'
               ) : sort.isReverse ? (
