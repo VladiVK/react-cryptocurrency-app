@@ -5,6 +5,7 @@ import {CryptosContext} from '../contexts/CryptosContext'
 // components
 import CryptosTable from './CryptosTable'
 import SearchBar from './SearchBar'
+import CryptoCard from './CryptoCard'
 // Material-UI
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -25,16 +26,15 @@ const Cryptos = () => {
             <SearchBar />
 
             <Grid item container>
+              <CryptoCard />
               <Grid item xs={false} sm={1} />
               <Grid item xs={12} sm={10}>
                 <Typography align='center' variant='h4'>
                   Top 100 cryptos by Market Cap
                 </Typography>
-
                 <CryptosTable />
-                
               </Grid>
-              <Grid item xs={false} sm={1} />
+              <Grid item xs={false} sm={1} />   
             </Grid>
           </>
         }

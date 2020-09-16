@@ -145,7 +145,7 @@ const CryptosTable = () => {
 
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} maxWidth='sm'>
       <Table aria-label='simple table'>
         <TableHead>
           <TableRow>
