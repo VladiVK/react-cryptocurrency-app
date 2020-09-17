@@ -1,6 +1,6 @@
 import React from 'react';
 import { LineChart, Line } from 'recharts';
-import Typography from '@material-ui/core/Typography'
+
 
 const culcIsPositive = (value) => {
   switch (true) {
@@ -16,7 +16,7 @@ const culcChartColor = (value) => {
   let parsedValue = new Intl.NumberFormat('en-US', { style: 'percent' })
     .format(value)
     .replace('%', '');
-  parsedValue = parsedValue === '-0' ? 0 : Number(parsedValue);
+  parsedValue = (parsedValue === '-0') ? 0 : Number(parsedValue);
 
   switch (true) {
     case parsedValue > 0:

@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const dayChanges = (dataObj, key) => {
+const priceChanges = (dataObj, key) => {
   let percentageValue = 'NA';
 
   if (dataObj) {
@@ -63,11 +63,11 @@ const dayChanges = (dataObj, key) => {
   }
   return percentageValue;
 };
-const dayChangesColor = (dataObj, key) => {
+const priceChangesColor = (dataObj, key) => {
   if (!dataObj) return 'red';
 
   if (dataObj) {
-    const value = parseFloat(dayChanges(dataObj, key));
+    const value = parseFloat(priceChanges(dataObj, key));
 
     switch (true) {
       case value === 0:
@@ -91,6 +91,10 @@ const getMarketData = (dataObj, key) => {
 
   return marketCap;
 };
+const getCellAlphaBet = (obj, keyName, name) => {
+  return obj.sortKey !== keyName ? name
+   : obj.isReverse ? <span>Name &uarr; z-a</span> : <span>Name &darr; a-z</span>  
+}
 
 const SORTS = {
   NONE: (list) => list,
@@ -110,11 +114,7 @@ const CryptosTable = () => {
 
   const sort = state.filters.find( el => el.value === true);
   //{sortKey: 'NONE', value: true, isReverse: false},
-  
-  // const handleSort = (sortKey) => {
-  //   const isReverse = sort.sortKey === sortKey && sort.isReverse === false;
-  //   setSort({ sortKey, isReverse });
-  // };
+
   const handleSort = (sortKey) => {
     const isReverse = (sort.sortKey === sortKey) && (sort.isReverse === false);
     dispatch({
@@ -126,9 +126,6 @@ const CryptosTable = () => {
 
   const sortFunction = SORTS[sort.sortKey];
   
-
-  
-   
   const createList = () => {
     if(state.searchTerm.length === 0) return localList
     return localList.filter( coin => (
@@ -138,8 +135,6 @@ const CryptosTable = () => {
   }
  // initial list by search condition or as it is
   const initialList = createList();
-
-  // console.log(initialList);
 
   const sortedCryptos = sort.isReverse
     ? sortFunction( initialList ).reverse()
@@ -151,6 +146,7 @@ const CryptosTable = () => {
       <Table aria-label='simple table'>
         <TableHead>
           <TableRow>
+
             <Hidden only={['xs', 'sm']}>
               <TableCell>Rank</TableCell>
             </Hidden>
@@ -158,15 +154,10 @@ const CryptosTable = () => {
             <TableCell className={classes.resizedCell}
              align='left' onClick={ () => handleSort('NAME')}
              >
-              {sort.sortKey !== 'NAME' ? (
-                'Name'
-              ) : sort.isReverse ? (
-                <span>Name &uarr; z-a</span>
-              ) : (
-                <span>Name &darr; a-z</span>
-              )}
+              { getCellAlphaBet(sort, 'NAME', 'Name') }
             </TableCell>
-            <TableCell align='left' className={classes.resizedCell}>
+            
+            <TableCell align='left'>
               Chart (24h)
             </TableCell>
 
@@ -185,7 +176,11 @@ const CryptosTable = () => {
                 )}
               </TableCell>
             </Hidden>
-            <TableCell align='left' className={classes.resizedCell} onClick={() => handleSort('PRICE')}>
+            <TableCell
+              align='left'
+              className={classes.resizedCell}
+              onClick={() => handleSort('PRICE')}
+            >
               {sort.sortKey !== 'PRICE' ? (
                 'Price'
               ) : sort.isReverse ? (
@@ -196,7 +191,7 @@ const CryptosTable = () => {
             </TableCell>
 
             <Hidden only='xs'>
-              <TableCell className={classes.resizedCell} align='left'>Change (24h)</TableCell>
+              <TableCell className={classes.resizedCell} align='left'>Changes</TableCell>
             </Hidden>
 
           </TableRow>
@@ -228,8 +223,9 @@ const CryptosTable = () => {
                   
                 </Box>
               </TableCell>
-              <TableCell align='left' style={{paddingLeft: 0, marginLeft: 0}}>
-               <Box style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+
+              <TableCell align='left' style={{paddingLeft: 0, marginLeft: 0}} >
+               <Box style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
                 {!crypto['1d'] ? (
                   'NA'
                 ) : (
@@ -240,7 +236,7 @@ const CryptosTable = () => {
                             priceChanges={crypto['1d'].price_change}
                             priceChangesPct={crypto['1d'].price_change_pct}
                           />
-                          <Typography>24h</Typography> 
+                          <Typography align='center' variant='body2' style={{color: 'gray'}}>24h</Typography> 
                         </>
                 )}
                 </Box>
@@ -258,18 +254,54 @@ const CryptosTable = () => {
                 <Typography variant='subtitle1'>
                   {getMarketData(crypto, 'price')}
                 </Typography>
+
+                <Hidden only={['sm', 'md', 'lg', 'xl']}>
+
+                  <Typography
+                    variant='body2'
+                    style={{
+                      color: priceChangesColor(crypto['1d'], 'price_change_pct'),
+                      paddingLeft: '1rem'
+                    }}
+                  >
+                    {`${priceChanges(crypto['1d'], 'price_change_pct')} `}
+                    <span style={{color: 'gray'}}>1d</span>
+                  </Typography>
+
+                  <Typography
+                    variant='body2'
+                    style={{
+                      color: priceChangesColor(crypto['30d'], 'price_change_pct'),
+                      paddingLeft: '1rem'
+                    }}
+                  >
+                    {`${priceChanges(crypto['30d'], 'price_change_pct')} `}
+                    <span style={{color: 'gray'}}>30d</span>
+                  </Typography>
+
+                </Hidden>
+
               </TableCell>
 
               <Hidden only='xs'>
-                <TableCell
-                  align='left'
-                  style={{color: dayChangesColor(crypto['1d'], 'price_change_pct')}}
-                >
-                <Typography variant='subtitle1'>
-                    {dayChanges(crypto['1d'], 'price_change_pct')}
-                 </Typography>
+                <TableCell align='left' >
+                  <Typography
+                    variant='subtitle1'
+                    style={{color: priceChangesColor(crypto['1d'], 'price_change_pct')}}
+                  >
+                    {`${priceChanges(crypto['1d'], 'price_change_pct')} `}
+                    <span style={{color: 'gray'}}>(1 day)</span>
+                  </Typography>
+                  <Typography
+                    variant='subtitle1'
+                    style={{color: priceChangesColor(crypto['30d'], 'price_change_pct')}}
+                  >
+                  {`${priceChanges(crypto['30d'], 'price_change_pct')} `}
+                    <span style={{color: 'gray'}}>(30 days)</span>
+                  </Typography>
                 </TableCell>
               </Hidden>
+
             </TableRow>
           ))}
         </TableBody>
