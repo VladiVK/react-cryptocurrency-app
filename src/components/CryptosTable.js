@@ -15,7 +15,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-// Task: learn Hidden component Material UI
+// Hidden component Material UI
+import Hidden from '@material-ui/core/Hidden';
+import withWidth from '@material-ui/core/withWidth';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,8 +44,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  bigScreen: {
-    ['@media (max-width: 700px)']: { display: 'none' },
+  resizedCell: {
+    // marginLeft: 0,
+    // marginRight: 0,
+    paddingLeft: '10px',
+    paddingRight: 0,
   },
 }));
 
@@ -95,6 +101,7 @@ const SORTS = {
 
 // Component
 const CryptosTable = () => {
+  
   const classes = useStyles();
 
   const [state, dispatch] = useContext(CryptosContext);
@@ -104,11 +111,6 @@ const CryptosTable = () => {
   const sort = state.filters.find( el => el.value === true);
   //{sortKey: 'NONE', value: true, isReverse: false},
   
-
-
-  
-
-
   // const handleSort = (sortKey) => {
   //   const isReverse = sort.sortKey === sortKey && sort.isReverse === false;
   //   setSort({ sortKey, isReverse });
@@ -145,18 +147,16 @@ const CryptosTable = () => {
 
 
   return (
-    <TableContainer component={Paper} maxWidth='sm'>
+    <TableContainer component={Paper} >
       <Table aria-label='simple table'>
         <TableHead>
           <TableRow>
-            <TableCell
-             className={classes.bigScreen}  
-              /* component='th' */
-              /* scope='row' */
-            >
-              Rank
-            </TableCell>
-            <TableCell align='left' onClick={ () => handleSort('NAME')}
+            <Hidden only={['xs', 'sm']}>
+              <TableCell>Rank</TableCell>
+            </Hidden>
+
+            <TableCell className={classes.resizedCell}
+             align='left' onClick={ () => handleSort('NAME')}
              >
               {sort.sortKey !== 'NAME' ? (
                 'Name'
@@ -166,21 +166,26 @@ const CryptosTable = () => {
                 <span>Name &darr; a-z</span>
               )}
             </TableCell>
-            <TableCell align='left'>Chart (24h)</TableCell>
-            <TableCell
-              className={classes.bigScreen}
-              align='left'
-              onClick={() => handleSort('MARKET_CAP')}
-            >
-              {sort.sortKey !== 'MARKET_CAP' ? (
-                'Market Cap'
-              ) : sort.isReverse ? (
-                <span>Market Cap &uarr;</span>
-              ) : (
-                <span>Market Cap &darr;</span>
-              )}
+            <TableCell align='left' className={classes.resizedCell}>
+              Chart (24h)
             </TableCell>
-            <TableCell align='left' onClick={() => handleSort('PRICE')}>
+
+            <Hidden only={['xs', 'sm']}>
+              <TableCell className={classes.resizedCell}
+              
+                align='left'
+                onClick={() => handleSort('MARKET_CAP')}
+              >
+                {sort.sortKey !== 'MARKET_CAP' ? (
+                  'Market Cap'
+                ) : sort.isReverse ? (
+                  <span>Market Cap &uarr;</span>
+                ) : (
+                  <span>Market Cap &darr;</span>
+                )}
+              </TableCell>
+            </Hidden>
+            <TableCell align='left' className={classes.resizedCell} onClick={() => handleSort('PRICE')}>
               {sort.sortKey !== 'PRICE' ? (
                 'Price'
               ) : sort.isReverse ? (
@@ -189,62 +194,82 @@ const CryptosTable = () => {
                 <span>Price &darr;</span>
               )}
             </TableCell>
-            <TableCell align='left'>Change (24h)</TableCell>
+
+            <Hidden only='xs'>
+              <TableCell className={classes.resizedCell} align='left'>Change (24h)</TableCell>
+            </Hidden>
+
           </TableRow>
         </TableHead>
         <TableBody>
           {sortedCryptos.map((crypto) => (
             <TableRow key={crypto.id}>
-              <TableCell
-                className={classes.bigScreen}
-                align='left'
-                style={{ maxWidth: '1.2rem' }}
-              >
+
+            <Hidden only={['xs', 'sm']}>
+              <TableCell align='left' style={{ maxWidth: '0.8rem' }} >
                 {crypto.rank}
               </TableCell>
-              <TableCell align='left' className={classes.flexBasis}>
-                <Avatar
-                  style={{ display: 'inline-block', marginRight: '1rem' }}
-                  src={crypto.logo_url}
-                  className={classes.middle}
-                />
+            </Hidden>
 
+              <TableCell align='left' className={`${classes.resizedCell}`}>
+               
                 <Box style={{ display: 'flex', flexDirection: 'column' }}>
+
+                  <Box style={{ display: 'flex'}}>
+                    <Avatar
+                      style={{ display: 'inline-block', marginRight: '0.5rem' }}
+                      src={crypto.logo_url}
+                      className={classes.middle}
+                    />
+                    <Typography variant='overline'>{crypto.currency}</Typography>
+                  </Box>
+
                   <Typography variant='subtitle2'>{crypto.name}</Typography>
-                  <Typography variant='overline'>{crypto.currency}</Typography>
+                  
                 </Box>
               </TableCell>
-              <TableCell align='left' style={{ color: 'red' }}>
+              <TableCell align='left' style={{paddingLeft: 0, marginLeft: 0}}>
+               <Box style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 {!crypto['1d'] ? (
                   'NA'
                 ) : (
-                  <PriceChart
-                    price={crypto.price}
-                    priceChanges={crypto['1d'].price_change}
-                    priceChangesPct={crypto['1d'].price_change_pct}
-                  />
+
+                        <>
+                          <PriceChart
+                            price={crypto.price}
+                            priceChanges={crypto['1d'].price_change}
+                            priceChangesPct={crypto['1d'].price_change_pct}
+                          />
+                          <Typography>24h</Typography> 
+                        </>
                 )}
+                </Box>
               </TableCell>
-              <TableCell className={classes.bigScreen} align='left'>
-                <Typography variant='subtitle1'>
-                  {getMarketData(crypto, 'market_cap')}
-                </Typography>
-              </TableCell>
-              <TableCell align='left'>
+
+              <Hidden only={['xs', 'sm']}>
+                <TableCell align='left'>
+                  <Typography variant='subtitle1'>
+                    {getMarketData(crypto, 'market_cap')}
+                  </Typography>
+                </TableCell>
+              </Hidden>
+
+              <TableCell align='left' className={classes.resizedCell}>
                 <Typography variant='subtitle1'>
                   {getMarketData(crypto, 'price')}
                 </Typography>
               </TableCell>
-              <TableCell
-                align='left'
-                style={{
-                  color: dayChangesColor(crypto['1d'], 'price_change_pct'),
-                }}
-              >
+
+              <Hidden only='xs'>
+                <TableCell
+                  align='left'
+                  style={{color: dayChangesColor(crypto['1d'], 'price_change_pct')}}
+                >
                 <Typography variant='subtitle1'>
-                  {dayChanges(crypto['1d'], 'price_change_pct')}
-                </Typography>
-              </TableCell>
+                    {dayChanges(crypto['1d'], 'price_change_pct')}
+                 </Typography>
+                </TableCell>
+              </Hidden>
             </TableRow>
           ))}
         </TableBody>
@@ -253,4 +278,8 @@ const CryptosTable = () => {
   );
 };
 
-export default CryptosTable;
+CryptosTable.propTypes = {
+  width: PropTypes.oneOf(['lg', 'md', 'sm', 'xl', 'xs']).isRequired,
+};
+
+export default  withWidth()(CryptosTable);

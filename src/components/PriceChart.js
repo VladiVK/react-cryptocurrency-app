@@ -1,5 +1,6 @@
 import React from 'react';
 import { LineChart, Line } from 'recharts';
+import Typography from '@material-ui/core/Typography'
 
 const culcIsPositive = (value) => {
   switch (true) {
@@ -41,13 +42,15 @@ const PriceChart = ({ price, priceChanges, priceChangesPct }) => {
   ];
 
   return (
-    <LineChart width={100} height={50} data={data}>
-      <Line
-        type='monotone'
-        dataKey='uv'
-        stroke={culcChartColor(priceChangesPct)}
-      />
-    </LineChart>
+    
+      <LineChart width={100} height={40} data={data}>
+        <Line
+          type='monotone'
+          dataKey='uv'
+          stroke={culcChartColor(priceChangesPct)}
+        />
+      </LineChart>
+    
   );
 };
 
