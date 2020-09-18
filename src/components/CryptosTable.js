@@ -45,8 +45,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   resizedCell: {
-    // marginLeft: 0,
-    // marginRight: 0,
     paddingLeft: '10px',
     paddingRight: 0,
   },
@@ -91,10 +89,15 @@ const getMarketData = (dataObj, key) => {
 
   return marketCap;
 };
-const getCellAlphaBet = (obj, keyName, name) => {
-  return obj.sortKey !== keyName ? name
-   : obj.isReverse ? <span>Name &uarr; z-a</span> : <span>Name &darr; a-z</span>  
+const getCellName = (obj, sortKey, isReverseKey, keyName, name, specials = null) => {
+  
+  return (
+    obj[sortKey] !== keyName ? name : obj[isReverseKey] ?
+        <span>{name} &uarr; {specials? specials[0] : null}</span>
+        : <span>{name} &darr; {specials? specials[1] : null}</span> 
+     ) 
 }
+
 
 const SORTS = {
   NONE: (list) => list,
@@ -151,29 +154,26 @@ const CryptosTable = () => {
               <TableCell>Rank</TableCell>
             </Hidden>
 
-            <TableCell className={classes.resizedCell}
-             align='left' onClick={ () => handleSort('NAME')}
+            <TableCell 
+              className={classes.resizedCell}
+              align='left'
+              onClick={ () => handleSort('NAME')}
              >
-              { getCellAlphaBet(sort, 'NAME', 'Name') }
+              { getCellName(sort, 'sortKey', 'isReverse', 'NAME', 'Name', ['z-a', 'a-z']) }
             </TableCell>
             
-            <TableCell align='left'>
+            <TableCell align='left' style={{paddingLeft: 0}}>
               Chart (24h)
             </TableCell>
 
             <Hidden only={['xs', 'sm']}>
-              <TableCell className={classes.resizedCell}
-              
+              <TableCell 
+                className={classes.resizedCell}
                 align='left'
                 onClick={() => handleSort('MARKET_CAP')}
               >
-                {sort.sortKey !== 'MARKET_CAP' ? (
-                  'Market Cap'
-                ) : sort.isReverse ? (
-                  <span>Market Cap &uarr;</span>
-                ) : (
-                  <span>Market Cap &darr;</span>
-                )}
+              { getCellName(sort, 'sortKey', 'isReverse', 'MARKET_CAP', 'Market Cap') }
+               
               </TableCell>
             </Hidden>
             <TableCell
@@ -181,13 +181,8 @@ const CryptosTable = () => {
               className={classes.resizedCell}
               onClick={() => handleSort('PRICE')}
             >
-              {sort.sortKey !== 'PRICE' ? (
-                'Price'
-              ) : sort.isReverse ? (
-                <span>Price &uarr;</span>
-              ) : (
-                <span>Price &darr;</span>
-              )}
+              { getCellName(sort, 'sortKey', 'isReverse', 'PRICE', 'Price') }
+           
             </TableCell>
 
             <Hidden only='xs'>
@@ -227,17 +222,18 @@ const CryptosTable = () => {
               <TableCell align='left' style={{paddingLeft: 0, marginLeft: 0}} >
                <Box style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start'}}>
                 {!crypto['1d'] ? (
-                  'NA'
+                  <Typography  style={{color: 'red', alignSelf: 'center'}}>NA</Typography>
                 ) : (
-
-                        <>
-                          <PriceChart
-                            price={crypto.price}
-                            priceChanges={crypto['1d'].price_change}
-                            priceChangesPct={crypto['1d'].price_change_pct}
-                          />
-                          <Typography align='center' variant='body2' style={{color: 'gray'}}>24h</Typography> 
-                        </>
+                    <>
+                      <PriceChart
+                        price={crypto.price}
+                        priceChanges={crypto['1d'].price_change}
+                        priceChangesPct={crypto['1d'].price_change_pct}
+                      />
+                      <Typography variant='body2' style={{color: 'gray', alignSelf: 'center'}}>
+                        24h
+                      </Typography> 
+                    </>
                 )}
                 </Box>
               </TableCell>
