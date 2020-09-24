@@ -16,7 +16,11 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
 import Container from '@material-ui/core/Container'
-import { Button } from '@material-ui/core';
+
+
+import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -154,10 +158,20 @@ const SearchBar = (props) => {
           </Toolbar>
           {
             isFilters && 
-              <Container>
-                <Button onClick={() => handleSort('NAME')}>Name</Button>
-                <Button onClick={() => handleSort('PRICE')}>Price</Button>
-                <Button onClick={() => handleSort('MARKET_CAP')}>Market Cap</Button>
+              <Container style={{display: 'flex', alignItems: 'center'}}>
+                <Typography variant='subtitle1' display='inline'>Sort By: </Typography>
+
+                <IconButton onClick={() => handleSort('NAME')} style={{color: 'white'}}>
+                  <SortByAlphaIcon fontSize='small' />
+                </IconButton>
+
+                <IconButton onClick={() => handleSort('PRICE')} style={{color: 'white'}}>
+                  <AttachMoneyIcon fontSize='small' />
+                </IconButton>
+
+                <IconButton  onClick={() => handleSort('MARKET_CAP')} style={{color: 'white'}}>
+                  <AccountBalanceIcon fontSize='small' />
+                </IconButton>
               </Container>
           }
         </AppBar>

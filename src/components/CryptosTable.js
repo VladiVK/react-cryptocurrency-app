@@ -108,6 +108,8 @@ const SORTS = {
 
 // Component
 const CryptosTable = () => {
+
+  console.log('CryptosTable... RENDER')
   
   const classes = useStyles();
 
