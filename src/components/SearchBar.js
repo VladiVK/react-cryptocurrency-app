@@ -14,10 +14,10 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 // import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
+// import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
 import Container from '@material-ui/core/Container'
 
-
+import FilterListIcon from '@material-ui/icons/FilterList';
 import SortByAlphaIcon from '@material-ui/icons/SortByAlpha';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
@@ -134,7 +134,8 @@ const SearchBar = (props) => {
               color='inherit'
               aria-label='open drawer'
             > 
-              <TimelineRoundedIcon />
+              {/* <TimelineRoundedIcon /> */}
+              <FilterListIcon fontSize='large' />
             </IconButton>
             <Typography className={classes.title} variant='h6' noWrap>
               Cryptos Market Digest

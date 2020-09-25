@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { CryptosContext } from '../contexts/CryptosContext';
 import PriceChart from './PriceChart';
 // lodash
-import { initial, sortBy } from 'lodash';
+import { sortBy } from 'lodash';
 // Material-UI
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
