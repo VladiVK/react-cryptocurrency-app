@@ -14,7 +14,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 // import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-// import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
+import TimelineRoundedIcon from '@material-ui/icons/TimelineRounded';
 import Container from '@material-ui/core/Container'
 
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -120,6 +120,8 @@ const SearchBar = (props) => {
       dispatch({type: 'SEARCH_TERM', payload: inputValue})
   }, [inputValue, dispatch] )
 
+  console.log('SearchBar RERENDER...');
+
   return (
     <div className={classes.root}>
      
@@ -128,19 +130,28 @@ const SearchBar = (props) => {
           <Toolbar>
            
             <IconButton
-              onClick={ () => setIsFilters( prev => !prev) }
+              
               edge='start'
               className={classes.menuButton}
               color='inherit'
               aria-label='open drawer'
             > 
-              {/* <TimelineRoundedIcon /> */}
-              <FilterListIcon fontSize='large' />
+              <TimelineRoundedIcon />
+              {/* <FilterListIcon fontSize='large' /> */}
             </IconButton>
             <Typography className={classes.title} variant='h6' noWrap>
               Cryptos Market Digest
             </Typography>
+
+            <IconButton
+              color='inherit'
+              onClick={ () => setIsFilters( prev => !prev) }
+            >
+              <FilterListIcon />
+            </IconButton>
+
             <div className={classes.search}>
+              
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>

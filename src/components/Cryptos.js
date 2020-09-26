@@ -4,9 +4,10 @@ import { CryptosContext } from '../contexts/CryptosContext';
 // components
 import CryptosTable from './CryptosTable';
 import SearchBar from './SearchBar';
+import LoaderComp from './LoaderComp';
 
 // Material-UI
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
@@ -15,7 +16,7 @@ const Cryptos = () => {
 
   return (
     <Grid container direction='column'>
-      {state.loading && <CircularProgress />}
+      {state.loading && <LoaderComp />}
       {state.error && <h1>{state.error}</h1>}
       {!state.loading && !state.error && (
         <>
