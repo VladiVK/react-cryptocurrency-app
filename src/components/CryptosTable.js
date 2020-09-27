@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { CryptosContext } from '../contexts/CryptosContext';
 import PriceChart from './PriceChart';
+import {Link} from 'react-router-dom'
 // lodash
 import { sortBy } from 'lodash';
 // Material-UI
@@ -193,6 +194,7 @@ const CryptosTable = () => {
 
           </TableRow>
         </TableHead>
+
         <TableBody>
           {sortedCryptos.map((crypto) => (
             <TableRow key={crypto.id}>
@@ -208,16 +210,22 @@ const CryptosTable = () => {
                 <Box style={{ display: 'flex', flexDirection: 'column' }}>
 
                   <Box style={{ display: 'flex'}}>
+                    
                     <Avatar
                       style={{ display: 'inline-block', marginRight: '0.5rem' }}
                       src={crypto.logo_url}
                       className={classes.middle}
                     />
+                    
                     <Typography variant='overline'>{crypto.currency}</Typography>
+                    
+                    
                   </Box>
 
-                  <Typography variant='subtitle2'>{crypto.name}</Typography>
-                  
+                  <Link to={`/${crypto.id}`} style={{textDecoration: 'none', color: 'inherit'}}>
+                    <Typography variant='subtitle2'>{crypto.name}</Typography>
+                  </Link>
+
                 </Box>
               </TableCell>
 

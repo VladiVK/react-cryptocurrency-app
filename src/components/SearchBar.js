@@ -1,4 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
+
+import {withRouter} from 'react-router-dom'
+
 import {CryptosContext} from '../contexts/CryptosContext'
 
 import PropTypes from 'prop-types';
@@ -121,6 +124,7 @@ const SearchBar = (props) => {
   }, [inputValue, dispatch] )
 
   console.log('SearchBar RERENDER...');
+  console.log(props.history);
 
   return (
     <div className={classes.root}>
@@ -135,10 +139,12 @@ const SearchBar = (props) => {
               className={classes.menuButton}
               color='inherit'
               aria-label='open drawer'
+              onClick={ () => props.history.push('/')}
             > 
               <TimelineRoundedIcon />
-              {/* <FilterListIcon fontSize='large' /> */}
+              
             </IconButton>
+
             <Typography className={classes.title} variant='h6' noWrap>
               Cryptos Market Digest
             </Typography>
@@ -192,4 +198,4 @@ const SearchBar = (props) => {
     </div>
   );
 };
-export default SearchBar;
+export default withRouter(SearchBar) ;

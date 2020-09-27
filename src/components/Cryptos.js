@@ -3,7 +3,6 @@ import { CryptosContext } from '../contexts/CryptosContext';
 
 // components
 import CryptosTable from './CryptosTable';
-import SearchBar from './SearchBar';
 import LoaderComp from './LoaderComp';
 
 // Material-UI
@@ -11,16 +10,15 @@ import LoaderComp from './LoaderComp';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
-const Cryptos = () => {
+const Cryptos = (props) => {
   const [state] = useContext(CryptosContext);
-
+  console.log(props)
   return (
     <Grid container direction='column'>
       {state.loading && <LoaderComp />}
       {state.error && <h1>{state.error}</h1>}
       {!state.loading && !state.error && (
         <>
-          <SearchBar />
 
           <Grid item container>
             <Grid item xs={false} sm={1} />
