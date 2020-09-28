@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import {withRouter} from 'react-router-dom'
+import {useHistory, withRouter} from 'react-router-dom'
 
 import {CryptosContext} from '../contexts/CryptosContext'
 
@@ -100,6 +100,9 @@ HideOnScroll.propTypes = {
 const SearchBar = (props) => {
   const classes = useStyles();
 
+  // router hook
+  const history = useHistory();
+
   const [inputValue, setInputValue] = useState('');
 
   const [isFilters, setIsFilters] = useState(false);
@@ -139,7 +142,7 @@ const SearchBar = (props) => {
               className={classes.menuButton}
               color='inherit'
               aria-label='open drawer'
-              onClick={ () => props.history.push('/')}
+              onClick={ () => history.push('/')}
             > 
               <TimelineRoundedIcon />
               
@@ -198,4 +201,5 @@ const SearchBar = (props) => {
     </div>
   );
 };
-export default withRouter(SearchBar) ;
+// export default withRouter(SearchBar) ;
+export default SearchBar;
