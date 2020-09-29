@@ -32,7 +32,7 @@ export const CryptosProvider = (props) => {
         axios
             .get(URL)
             .then( response => {
-                const cryptoData = response.data.slice(0,35)
+                const cryptoData = response.data.slice(0,100)
                 dispatch({type: 'FETCH_SUCCESS', payload: cryptoData})
             })
             .catch( e => dispatch({type: 'FECTH_ERROR'}) )  

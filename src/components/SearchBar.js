@@ -127,7 +127,7 @@ const SearchBar = (props) => {
   }, [inputValue, dispatch] )
 
   console.log('SearchBar RERENDER...');
-  console.log(props.history);
+
 
   return (
     <div className={classes.root}>
