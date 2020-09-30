@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch, useHistory} from 'react-router-dom';
 import axios from 'axios';
 
 import {CryptosContext} from '../contexts/CryptosContext';
-
 import LoaderComp from './LoaderComp';
 import {
   Card,
@@ -12,6 +11,7 @@ import {
   Typography,
   CardContent,
   Box,
+  Button
 } from '@material-ui/core';
 
 // const URL = `https://api.nomics.com/v1/currencies/ticker?key=ae04d4b6ed06b87563e71f31fd10bc23`;
@@ -31,6 +31,7 @@ const getPrice = (dataObj, key) => {
 const CryptoDetail = () => {
 
   const match = useRouteMatch();
+  const history = useHistory();
   
 // const [crypto, setCrypto] = useState(null);
   const [state, dispatch] = useContext(CryptosContext);
@@ -78,6 +79,18 @@ const CryptoDetail = () => {
           </Typography>
           <Typography variant='h6'>{crypto.circulating_supply}</Typography>
         </Box>
+
+        <Button 
+          variant="outlined"
+          size="small"
+          color="primary"
+          style={{marginTop: '1rem'}}
+          onClick={ () => history.push('/')}
+        >
+          go back
+        </Button>
+
+        
 
       </CardContent>
     </Card>
