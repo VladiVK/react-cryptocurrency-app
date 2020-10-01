@@ -2,3 +2,34 @@ API docs can be found here: https://api.nomics.com/
 API key: ae04d4b6ed06b87563e71f31fd10bc23
 
 // https://www.coingecko.com/api/documentations/v3#/coins/get_coins__id_
+
+
+// https://stackoverflow.com/questions/50155909/how-to-use-context-api-with-react-router-v4/50158702
+
+  /*
+  
+  <CryptosProvider>
+      <SearchBar />
+    <Switch>
+        <Route exact path='/' component={Cryptos } />
+        <Route  path='/:id' component={Crypto } />
+    </Switch>    
+  </CryptosProvider>
+    
+    */
+
+
+/*     
+<ContextA>
+    <Switch>
+        <Route exact path='/' render={ () => <Redirect to='/route1' /> } />
+        <Route path='/route1' component={ Component1 } />
+    </Switch>
+    <ContextB>
+        <Switch>
+            <Route path='/route2' component={ Component2 } />
+            <Route path='/route3' component={ Component3 } />
+        </Switch>        
+    </ContextB>        
+</ContextA>
+ */
